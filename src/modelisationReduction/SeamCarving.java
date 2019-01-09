@@ -3,7 +3,6 @@ package modelisationReduction;
 import java.util.ArrayList;
 import java.io.*;
 import java.util.*;
-import java.util.logging.FileHandler;
 
 public class SeamCarving
 {
@@ -11,8 +10,7 @@ public class SeamCarving
     public static int[][] readpgm(String fn)
 	 {		
         try {
-            InputStream f = ClassLoader.getSystemClassLoader().getResourceAsStream(fn);
-            BufferedReader d = new BufferedReader(new InputStreamReader(f));
+            BufferedReader d = new BufferedReader(new FileReader(fn));
             String magic = d.readLine();
             String line = d.readLine();
             while (line.startsWith("#")) {
@@ -42,18 +40,19 @@ public class SeamCarving
 
     public static void writepgm (int[][] image, String filename) {
         //récupération de la taille (largeur et hauteur) du tableau de 'pixels'
-        int width = image.length;
-        int height = image[0].length;
+        int width = image[0].length;
+        int height = image.length;
 
         //instanciation d'un StringBuilder contenant les 'pixels' à écrire
         StringBuilder pgm = new StringBuilder("");
+        pgm.append("P2\n");
         pgm.append(width + " " + height + "\n"); //écriture de la largeur suivi de la hauteur
         pgm.append("255\n"); //écriture de la valeur max (255)
 
         //parcours du tableau et écriture dans le StringBuilder
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
-                pgm.append(image[col][row] + " ");
+                pgm.append(image[row][col] + " ");
             }
             pgm.append("\n");
         }
@@ -74,10 +73,10 @@ public class SeamCarving
 
     public static int[][] interest (int[][] image) {
         //récupération de la taille (largeur et hauteur) du tableau de 'pixels'
-        int width = image.length;
-        int height = image[0].length;
+        int width = image[0].length;
+        int height = image.length;
 
-        int[][] interest = new int[width][height];
+        int[][] interest = new int[height][width];
 
         //parcours du tableau
         for (int row = 0; row < height; row++) {
@@ -87,20 +86,20 @@ public class SeamCarving
 
                 if (col == 0) {
                     //la moyenne vaut le pixel suivant si il n'y a pas de voisin de gauche
-                    average = image[col+1][row];
+                    average = image[row][col+1];
                 } else if (col == width-1) {
                     //la moyenne vaut le pixel précédent si il n'y a pas de voisin de droite
-                    average = image[col-1][row];
+                    average = image[row][col-1];
                 } else {
                     //la moyenne est faite entre le voisin de droite et gauche
-                    average = (image[col-1][row] + image[col+1][row]) / 2;
+                    average = (image[row][col-1] + image[row][col+1]) / 2;
                 }
 
                 //calcul de la différence absolue et stockage dans le tableau d'intérêt
-                if (average < image[col][row]) {
-                    interest[col][row] = Math.abs(image[col][row] - average);
+                if (average < image[row][col]) {
+                    interest[row][col] = Math.abs(image[row][col] - average);
                 } else {
-                    interest[col][row] = Math.abs(average - image[col][row]);
+                    interest[row][col] = Math.abs(average - image[row][col]);
                 }
 
             }
@@ -111,8 +110,8 @@ public class SeamCarving
 
     public static Graph tograph (int[][] itr) {
         //récupération de la taille (largeur et hauteur) du tableau de 'pixels'
-        int width = itr.length;
-        int height = itr[0].length;
+        int width = itr[0].length;
+        int height = itr.length;
 
         Graph g = new GraphArrayList((width * height) + 2);
 
@@ -127,18 +126,15 @@ public class SeamCarving
             for (int col = 0; col < width; col++) {
 
                 if (col == 0) {
-                    System.out.println(vertex + " : à gauche");
-                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width, itr[col][row]));
-                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width + 1, itr[col][row]));
+                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width, itr[row][col]));
+                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width + 1, itr[row][col]));
                 } else if (col == width-1) {
-                    System.out.println(vertex + " : à droite");
-                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width - 1, itr[col][row]));
-                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width, itr[col][row]));
+                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width - 1, itr[row][col]));
+                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width, itr[row][col]));
                 } else {
-                    System.out.println(vertex + " : au milieu");
-                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width - 1, itr[col][row]));
-                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width, itr[col][row]));
-                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width + 1, itr[col][row]));
+                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width - 1, itr[row][col]));
+                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width, itr[row][col]));
+                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width + 1, itr[row][col]));
                 }
 
                 vertex++;
@@ -146,7 +142,7 @@ public class SeamCarving
         }
 
         for (int i = 0; i < width; i++) {
-            ((GraphArrayList) g).addEdge(new Edge(((width*height) - (width-1)) + i,(width * height) + 1 ,itr[i][height-1]));
+            ((GraphArrayList) g).addEdge(new Edge(((width*height) - (width-1)) + i,(width * height) + 1 ,itr[height-1][i]));
         }
 
         return g;
@@ -156,24 +152,45 @@ public class SeamCarving
         return DFS.dfs(g);
     }
 
-    public static int Bellman (Graph g, int s, int t, ArrayList<Integer> order) {
+    public static ArrayList<Integer> Bellman (Graph g, int s, int t, ArrayList<Integer> order) {
         int[] distances = new int[g.vertices()];
         for (int i = 0; i < g.vertices(); i++) {
             distances[i] = Integer.MAX_VALUE;
         }
         distances[s] = 0;
 
-        for (int k = 1; k < g.vertices(); k++) {
+        //sauvegarde des chemins dans une hashmap
+        HashMap<Integer, Integer> path = new HashMap<>();
+        for (int i = 0; i < g.vertices(); i++) {
+            path.put(i, null);
+        }
 
-            for (int u = 0; u < g.vertices(); u++) {
-                for (Edge e : g.next(u)) {
-                    distances[e.to] = Math.min(distances[e.to], distances[e.from] + e.cost);
+        int v;
+        for (int k = 0; k < g.vertices(); k++) {
+
+            v = order.get(k);
+            for (Edge e : g.prev(v)) {
+
+                if (distances[e.to] < distances[e.from] + e.cost) {
+                    distances[e.to] = distances[e.to];
+                } else {
+                    distances[e.to] = distances[e.from] + e.cost;
+                    path.put(e.to, e.from);
                 }
+
             }
 
         }
 
-        return distances[t];
+        Integer current = t;
+        ArrayList<Integer> shortestPath = new ArrayList<>();
+        while (current != null) {
+            shortestPath.add(current);
+            current = path.get(current);
+        }
+        Collections.reverse(shortestPath);
+
+        return shortestPath;
     }
    
 }

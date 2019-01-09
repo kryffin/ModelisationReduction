@@ -65,7 +65,6 @@ class DFS
 	boolean visited[] = new boolean[g.vertices()];
 	stack.push(s);
 	visited[s] = true;
-	System.out.println(s);
 	ArrayList<Integer> tritopo = new ArrayList<>();
 	while (!stack.empty()){
 	    boolean end = true;
@@ -80,7 +79,6 @@ class DFS
 	    for (Edge e: g.next(u))
         if (!visited[e.to]) /* (b) */ {
             visited[e.to] = true;
-            System.out.println(e.to);
             stack.push(e.to); /*(c) */
             end = false;
             break;
@@ -90,7 +88,6 @@ class DFS
             stack.pop();
         }
 	}
-	System.out.println(stack.capacity());
 
 	Collections.reverse(tritopo);
 	return tritopo;
@@ -114,11 +111,8 @@ class DFS
 	g.addEdge(new Edge(3, 5, 1));
 	g.addEdge(new Edge(5, 1, 1));
 	botched_dfs1(g, 0);
-        System.out.println();
 	botched_dfs2(g, 0);
-        System.out.println();
 	botched_dfs3(g, 0);
-        System.out.println();
 	botched_dfs4(g, 0);
 
 

@@ -6,7 +6,11 @@ import java.util.Arrays;
 public class Test {
 
     public static void main (String[] args) {
-        int[][] image = new int[][] {{3, 8, 200}, {11, 21, 60}, {24, 29, 25}, {39, 39, 0}};
+        int[][] image = new int[][] {{3, 11, 24, 39},
+                                     {8, 21, 29, 39},
+                                     {200, 60, 25, 0}};
+
+        SeamCarving.writepgm(image, "/Users/nicolasklz/test.pgm");
 
         System.out.println(Arrays.deepToString(image));
 
@@ -19,6 +23,8 @@ public class Test {
         Graph g = SeamCarving.tograph(interet);
 
         g.writeFile("graph.dot");
+
+        System.out.println("tri topo :");
 
         ArrayList<Integer> list = SeamCarving.tritopo(g);
 

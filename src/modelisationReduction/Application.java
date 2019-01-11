@@ -1,17 +1,22 @@
 package modelisationReduction;
 
 import java.util.ArrayList;
+import java.util.Locale;
+
+/**
+ * @author KLEINHENTZ 'Kryffin' Nicolas
+ */
 
 public class Application {
 
     /**
-     * Fonction de lancement de l'application prenant en argument le fichier .pgm source, le .pgm cible et le nombre de colonne à retirer
+     * Fonction de lancement de l'application prenant en argument le fichier .pgm source, le .pgm cible
      * @param args arguments de lancement
      */
     public static void main (String[] args) {
         //test sur les arguments du programme
-        if (args.length != 3) {
-            System.out.println("Le programme nécessite 2 arguments : java Application [fichierSource(.pgm)] [fichierCible(.pgm)] [nombre d'itérations]");
+        if (args.length != 2) {
+            System.out.println("Le programme nécessite 2 arguments : java Application [fichierSource(.pgm)] [fichierCible(.pgm)]");
             return;
         }
 
@@ -24,6 +29,12 @@ public class Application {
         int[][] image = SeamCarving.readpgm(args[0]);
 
         /* initialisation des variables */
+
+        //nombre de colonnes à retirer
+        int ite = 50;
+
+        //affichage de début de traitement
+        System.out.println("\nRéduction de " + ite + " colonnes depuis l'image " + args[0] + " vers l'image " + args[1]);
 
         //tableau d'entiers représentant l'intérêt de chaque pixel
         int[][] interet;
@@ -43,13 +54,15 @@ public class Application {
         //nouvelle image contenant l'image source sans n colonnes
         int[][] newImage = new int[height][width-1];
 
-        //récupération du 3ème argument étant le nombre de colonnes à retirer
-        int ite = Integer.parseInt(args[2]);
-
         /* traitement de l'image */
 
-        //itérations pour chaque colonne à retirer
-        for (int i = 0; i < ite; i++) {
+        System.out.println("Début du traitement...");
+
+        //itérations pour chaque colonne à retirer (on va de 1 à ite plutôt que 0 à ite-1 uniquement pour l'affichage du pourcentage de traitement)
+        for (int i = 1; i <= ite; i++) {
+
+            //appel du ramasse miettes
+            System.gc();
 
             //récupération de l'intérêt de l'image
             interet = SeamCarving.interest(image);
@@ -95,6 +108,9 @@ public class Application {
             //on réitérera sur l'image réduite
             image = newImage;
 
+            //affichage du pourcentage de traitement
+            System.out.print("\rTraitement : " + String.format(Locale.FRANCE,"%.2f", ((float) i / (float) ite) * 100.f) + " %");
+
         }
 
         /* sauvegarde de l'image modifiée */
@@ -106,6 +122,9 @@ public class Application {
 
         //écriture de l'image dans le fichier destination
         SeamCarving.writepgm(newImage, args[1]);
+
+        //affichage de confirmation de la fin du programme
+        System.out.println("\nTraitement terminé, nouvelle image enregistrée sous " + args[1] + "\n");
     }
 
 }

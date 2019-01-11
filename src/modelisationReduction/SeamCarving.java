@@ -120,11 +120,7 @@ public class SeamCarving
                 }
 
                 //calcul de la différence absolue et stockage dans le tableau d'intérêt
-                if (average < image[row][col]) {
-                    interest[row][col] = Math.abs(image[row][col] - average);
-                } else {
-                    interest[row][col] = Math.abs(average - image[row][col]);
-                }
+                interest[row][col] = Math.abs(Math.max(image[row][col], average) - Math.min(image[row][col], average));
 
             }
         }

@@ -39,6 +39,45 @@ public class SeamCarving
 	 }
 
     /**
+     * Fonction lisant un fichier ppm et la stockant dans un tableau 3 dimensions [hauteur][largeur][RGB]
+     * @param fn nom du fichier à lire
+     * @return tableau 3 dimensions [hauteur][largeur][RGB]
+     */
+    public static int[][][] readppm(String fn)
+    {
+        try {
+            BufferedReader d = new BufferedReader(new FileReader(fn));
+            String magic = d.readLine();
+            String line = d.readLine();
+            while (line.startsWith("#")) {
+                line = d.readLine();
+            }
+            Scanner s = new Scanner(line);
+            int width = s.nextInt();
+            int height = s.nextInt();
+            line = d.readLine();
+            s = new Scanner(line);
+            int maxVal = s.nextInt();
+            int[][][] im = new int[height][width][3];
+            s = new Scanner(d);
+            for (int row = 0; row < height; row++) {
+                for (int col = 0; col < width; col++) {
+                    for (int rgb = 0; rgb < 3; rgb++) {
+                        im[row][col][rgb] = s.nextInt();
+                    }
+                }
+            }
+
+            return im;
+        }
+
+        catch(Throwable t) {
+            t.printStackTrace(System.err) ;
+            return null;
+        }
+    }
+
+    /**
      * Fonction d'écriture d'une image .pgm à partir d'un tableau à deux dimensions d'entiers
      * @param image tableau représentant l'image
      * @param filename nom du fichier dans lequel sauvegarder l'image
@@ -67,9 +106,46 @@ public class SeamCarving
             pgm.append("\n");                       //retour chariot à chaque fin de ligne de pixels
         }
 
-        //vérification de l'extension du fichier à créer
-        if (!filename.endsWith(".pgm")) {
-            filename += ".pgm";
+        //écriture dans le fichier spécifié
+        try {
+            BufferedWriter bw = new BufferedWriter(new FileWriter(filename, false));
+            bw.write(pgm.toString());
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Fonction d'écriture d'une image .ppm à partir d'un tableau à trois dimensions d'entiers
+     * @param image tableau représentant l'image
+     * @param filename nom du fichier dans lequel sauvegarder l'image
+     */
+    public static void writeppm (int[][][] image, String filename) {
+        //récupération de la taille (largeur et hauteur) du tableau de 'pixels'
+        int width = image[0].length;
+        int height = image.length;
+
+        /* initialisation du fichier pgm */
+
+        StringBuilder pgm = new StringBuilder();    //instanciation d'un StringBuilder contenant les 'pixels' à écrire
+        pgm.append("P3\n");                         //format pgm de type P2
+        pgm.append(width + " " + height + "\n");    //écriture de la largeur suivi de la hauteur
+        pgm.append("255\n");                        //écriture de la valeur max (255)
+
+        /* parcours du tableau et écriture dans le StringBuilder */
+
+        //parcours du tableau
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                for (int rgb = 0; rgb < 3; rgb++) {
+
+                    pgm.append(image[row][col][rgb] + " ");  //renseignement du pixel correspondant
+
+                }
+
+            }
+            pgm.append("\n");                       //retour chariot à chaque fin de ligne de pixels
         }
 
         //écriture dans le fichier spécifié
@@ -208,8 +284,6 @@ public class SeamCarving
         //sommet courant pour le parcours
         int vertex = 1;
 
-        int op1, op2;
-
         //parcours du tableau
         for (int row = 0; row < height-1; row++) {
             for (int col = 0; col < width; col++) {
@@ -278,6 +352,96 @@ public class SeamCarving
 
         return g;
     }
+
+    /**
+     * Fonction d'énergie avant pour la construction d'un graphe orienté pondéré à partir d'une image (tableau 2d)
+     * @param image image à convertir en graphe
+     * @return graphe représentant l'image par fonction d'énergie avant
+     */
+    /*public static Graph energieAvant (int[][][] image) {
+        //récupération de la taille (largeur et hauteur) du tableau de 'pixels'
+        int width = image[0].length;
+        int height = image.length;
+
+        //initialisation du graphe avec largeur * hauteur + 2 sommets (nombre de pixels, sommet source et sommet destination)
+        Graph g = new GraphArrayList((width * height) + 2);
+
+        //création des arêtes depuis le sommet source (le premier du haut)
+        for (int i = 1; i <= width; i++) {
+            ((GraphArrayList) g).addEdge(new Edge(0, i, 0));
+        }
+
+        //sommet courant pour le parcours
+        int vertex = 1;
+
+        //parcours du tableau
+        for (int row = 0; row < height-1; row++) {
+            for (int col = 0; col < width; col++) {
+
+                if (col == 0) {
+
+                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width, image[row][col+1]));
+
+                    if (row == height - 2) {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width + 1, image[row][col+1]));
+                    } else {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width + 1, Math.abs(image[row][col+1] - image[row+1][col])));
+                    }
+
+                } else if (col == width-1) {
+
+                    if (row == height - 2) {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width - 1, image[row][col-1]));
+                    } else {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width - 1, Math.abs(image[row][col-1] - image[row+1][col])));
+                    }
+
+                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width, image[row][col-1]));
+
+                } else {
+
+                    if (row == height - 2) {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width - 1, image[row][col-1]));
+                    } else {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width - 1, Math.abs(image[row][col-1] - image[row+1][col])));
+                    }
+
+                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width, Math.abs(image[row][col+1] - image[row][col-1])));
+
+                    if (row == height - 2) {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width + 1, image[row][col+1]));
+                    } else {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width + 1, Math.abs(image[row][col+1] - image[row+1][col])));
+                    }
+
+                }
+
+                vertex++;
+
+            }
+        }
+
+        //création des arêtes en direction du sommet destination (le dernier du bas)
+        for (int i = 0; i < width; i++) {
+
+            if (i == 0) {
+
+                ((GraphArrayList) g).addEdge(new Edge(((width*height) - (width-1)) + i,(width * height) + 1, image[height-1][i+1]));
+
+            } else if (i == width - 1) {
+
+                ((GraphArrayList) g).addEdge(new Edge(((width*height) - (width-1)) + i,(width * height) + 1, image[height-1][i-1]));
+
+            } else {
+
+                ((GraphArrayList) g).addEdge(new Edge(((width*height) - (width-1)) + i,(width * height) + 1, Math.abs(image[height-1][i-1] - image[height-1][i+1])));
+
+            }
+
+        }
+
+        return g;
+    }*/
 
     /**
      * Fonction retournant une liste d'entiers (sommets du graphe) dans l'ordre suivi par le tri topologique appliqué au graphe

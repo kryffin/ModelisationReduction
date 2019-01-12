@@ -28,21 +28,31 @@ public class Application {
     }
 
     /**
-     * Fonction de lancement de l'application prenant en argument le fichier .pgm source, le .pgm cible
+     * Fonction de lancement de l'application prenant en argument le fichier .pgm ou .ppm source et destination
      * @param args arguments de lancement
      */
     public static void main (String[] args) {
         //test sur les arguments du programme
         if (args.length != 2) {
-            System.out.println("Le programme nécessite 2 arguments : java Application [fichierSource(.pgm)] [fichierCible(.pgm)]");
+            System.out.println("Le programme nécessite 2 arguments : java Application [fichierSource.pgm] [fichierCible.pgm]");
             return;
         }
 
-        //ajout de l'extension si elle n'est pas présente dans le nom du fichier source
-        if (!args[0].endsWith(".pgm")) {
-            args[0] += ".pgm";
+        if (args[0].endsWith(".pgm") && args[1].endsWith(".pgm")) {
+            pgm(args);
+        } else if (args[0].endsWith(".ppm") && args[1].endsWith(".ppm")) {
+            ppm(args);
+        } else {
+            System.out.println("Les fichiers n'ont pas d'extensions ou ne sont pas de la même extension.");
+            return;
         }
+    }
 
+    /**
+     * Fonction traitant une image .pgm (en niveaux de gris)
+     * @param args arguments de lancement
+     */
+    private static void pgm (String[] args) {
         //lecture du fichier source dans un tableau d'entier
         int[][] image = SeamCarving.readpgm(args[0]);
 
@@ -76,7 +86,7 @@ public class Application {
 
         System.out.println("Début du traitement...");
 
-            /* suppression des colonnes */
+        /* suppression des colonnes */
 
         //itérations pour chaque colonne à retirer (on va de 1 à iteCol plutôt que 0 à iteCol-1 uniquement pour l'affichage du pourcentage de traitement)
         for (int i = 1; i <= iteCol; i++) {
@@ -139,7 +149,7 @@ public class Application {
 
         System.out.println();
 
-            /* suppression des lignes */
+        /* suppression des lignes */
 
         //itérations pour chaque lignes à retirer (on va de 1 à iteRow plutôt que 0 à iteRow-1 uniquement pour l'affichage du pourcentage de traitement)
         for (int i = 1; i <= iteRow; i++) {
@@ -204,16 +214,20 @@ public class Application {
 
         /* sauvegarde de l'image modifiée */
 
-        //ajout de l'extension si elle n'est pas présente dans le nom du fichier destination
-        if (!args[1].endsWith(".pgm")) {
-            args[1] += ".pgm";
-        }
-
         //écriture de l'image dans le fichier destination
         SeamCarving.writepgm(newImage, args[1]);
 
         //affichage de confirmation de la fin du programme
         System.out.println("\nTraitement terminé, nouvelle image enregistrée sous " + args[1] + "\n");
+    }
+
+    /**
+     * Fonction traitant une image .ppm (en couleur)
+     * @param args arguments de lancement
+     */
+    private static void ppm (String[] args) {
+        int[][][] image = SeamCarving.readppm(args[0]);
+        SeamCarving.writeppm(image, args[1]);
     }
 
 }

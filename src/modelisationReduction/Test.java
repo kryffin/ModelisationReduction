@@ -12,7 +12,15 @@ public class Test {
 
         SeamCarving.writepgm(image, "/Users/nicolasklz/test.pgm");
 
-        System.out.println(Arrays.deepToString(image));
+        System.out.println("Image :\n" + Arrays.deepToString(image));
+
+        int[][] flippedImage = Application.flip(image);
+
+        System.out.println("Image retournée :\n" + Arrays.deepToString(flippedImage));
+
+        flippedImage = Application.flip(flippedImage);
+
+        System.out.println("Image retournée :\n" + Arrays.deepToString(flippedImage));
 
         System.out.println("Intérêt :");
 
@@ -23,6 +31,10 @@ public class Test {
         Graph g = SeamCarving.tograph(interet);
 
         g.writeFile("graph.dot");
+
+        Graph g1 = SeamCarving.energieAvant(image);
+
+        g1.writeFile("graph1.dot");
 
         System.out.println("tri topo :");
 

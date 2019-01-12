@@ -9,6 +9,24 @@ import java.util.Locale;
 
 public class Application {
 
+    public static int[][] flip (int[][] image) {
+        int width = image[0].length;
+        int height = image.length;
+
+        int[][] flippedImage = new int[width][height];
+
+        //parcours de l'image originalle
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+
+                flippedImage[col][row] = image[row][col];
+
+            }
+        }
+
+        return flippedImage;
+    }
+
     /**
      * Fonction de lancement de l'application prenant en argument le fichier .pgm source, le .pgm cible
      * @param args arguments de lancement
@@ -31,15 +49,15 @@ public class Application {
         /* initialisation des variables */
 
         //nombre de colonnes à retirer
-        int ite = 50;
+        int iteCol = 50;
+
+        //nombre de lignes à retirer
+        int iteRow = 50;
 
         //affichage de début de traitement
-        System.out.println("\nRéduction de " + ite + " colonnes depuis l'image " + args[0] + " vers l'image " + args[1]);
+        System.out.println("\nRéduction de " + iteCol + " colonnes depuis l'image " + args[0] + " vers l'image " + args[1]);
 
-        //tableau d'entiers représentant l'intérêt de chaque pixel
-        int[][] interet;
-
-        //graphe représentant l'image avec des arêtes pondérée vers les 3 voisins du bas depuis chaque pixel
+        //graphe représentant l'image avec des arêtes pondérée vers les 3 voisins du bas depuis chaque pixel par fonction d'énergie avant
         Graph g;
 
         //liste des sommets du graphe (pixels de l'image avec le sommet source et destination), ordonné par tri topologique
@@ -58,24 +76,23 @@ public class Application {
 
         System.out.println("Début du traitement...");
 
-        //itérations pour chaque colonne à retirer (on va de 1 à ite plutôt que 0 à ite-1 uniquement pour l'affichage du pourcentage de traitement)
-        for (int i = 1; i <= ite; i++) {
+            /* suppression des colonnes */
+
+        //itérations pour chaque colonne à retirer (on va de 1 à iteCol plutôt que 0 à iteCol-1 uniquement pour l'affichage du pourcentage de traitement)
+        for (int i = 1; i <= iteCol; i++) {
 
             //appel du ramasse miettes
             System.gc();
 
-            //récupération de l'intérêt de l'image
-            interet = SeamCarving.interest(image);
-
-            //production du graphe de l'intérêt de l'image
-            g = SeamCarving.tograph(interet);
+            //production du graphe de l'image par fonction d'énergie avant
+            g = SeamCarving.energieAvant(image);
 
             //production du tri topologique sur le graphe
             list = SeamCarving.tritopo(g);
 
             //calcul du meilleur chemin par l'algorithme de Bellman-Ford entre le sommet source et le sommet destination (haut et bas)
             //modifié/amélioré pour suivre le tri topologique car le graphe est un DAG
-            bestPath = SeamCarving.Bellman(g, 0, (interet.length * interet[0].length) + 1, list);
+            bestPath = SeamCarving.Bellman(g, 0, (image.length * image[0].length) + 1, list);
 
             //écrasement de la nouvelle image pour redimensionnement
             newImage = new int[height][width-1];
@@ -109,7 +126,63 @@ public class Application {
             image = newImage;
 
             //affichage du pourcentage de traitement
-            System.out.print("\rTraitement : " + String.format(Locale.FRANCE,"%.2f", ((float) i / (float) ite) * 100.f) + " %");
+            System.out.print("\rTraitement : " + String.format(Locale.FRANCE,"%.2f", ((float) i / (float) iteCol) * 100.f) + " %");
+
+        }
+
+            /* suppression des lignes */
+
+        int[][] flippedImage = new int[width][height];
+
+        //itérations pour chaque lignes à retirer (on va de 1 à iteRow plutôt que 0 à iteRow-1 uniquement pour l'affichage du pourcentage de traitement)
+        for (int i = 1; i <= iteRow; i++) {
+
+            //appel du ramasse miettes
+            System.gc();
+
+            //production du graphe de l'image par fonction d'énergie avant
+            g = SeamCarving.energieAvant(image);
+
+            //production du tri topologique sur le graphe
+            list = SeamCarving.tritopo(g);
+
+            //calcul du meilleur chemin par l'algorithme de Bellman-Ford entre le sommet source et le sommet destination (haut et bas)
+            //modifié/amélioré pour suivre le tri topologique car le graphe est un DAG
+            bestPath = SeamCarving.Bellman(g, 0, (image.length * image[0].length) + 1, list);
+
+            //écrasement de la nouvelle image pour redimensionnement
+            newImage = new int[height][width-1];
+
+            //pixel à traiter (nom du sommet)
+            int pixel = 1;
+
+            //colonne de la nouvelle image (finira à col-1 car on retire une colonne lors du parcours de l'image)
+            int newRow = 0;
+
+            //parcours des pixels de de l'image
+            for (int col = 0; col < width; col++) {
+                for (int row = 0; row < height; row++) {
+
+                    //si le pixel en lecture n'est pas à supprimer, on l'affecte à la nouvelle image et on incrémente la colonne de la nouvelle image
+                    if (!bestPath.contains(pixel)) {
+                        newImage[newRow][col] = image[row][col];
+                        newRow++;
+                    }
+
+                    pixel++;
+
+                }
+                newRow = 0; //réinitialisation de la colonne
+            }
+
+            //réduction du nombre de colonnes de l'image
+            height--;
+
+            //on réitérera sur l'image réduite
+            image = newImage;
+
+            //affichage du pourcentage de traitement
+            System.out.print("\rTraitement : " + String.format(Locale.FRANCE,"%.2f", ((float) i / (float) iteRow) * 100.f) + " %");
 
         }
 

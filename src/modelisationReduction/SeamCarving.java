@@ -120,7 +120,7 @@ public class SeamCarving
                 }
 
                 //calcul de la différence absolue et stockage dans le tableau d'intérêt
-                interest[row][col] = Math.abs(Math.max(image[row][col], average) - Math.min(image[row][col], average));
+                interest[row][col] = Math.abs(image[row][col] - average);
 
             }
         }
@@ -129,7 +129,7 @@ public class SeamCarving
     }
 
     /**
-     * Fonction retournant un graphe (DAG) représentant le tableau deux dimensions passé en argument
+     * Fonction retournant un graphe (DAG) orienté pondéré représentant le tableau deux dimensions passé en argument
      * @param itr tableau 2d à convertir en graphe
      * @return
      */
@@ -182,6 +182,98 @@ public class SeamCarving
         //création des arêtes en direction du sommet destination (le dernier du bas)
         for (int i = 0; i < width; i++) {
             ((GraphArrayList) g).addEdge(new Edge(((width*height) - (width-1)) + i,(width * height) + 1 ,itr[height-1][i]));
+        }
+
+        return g;
+    }
+
+    /**
+     * Fonction d'énergie avant pour la construction d'un graphe orienté pondéré à partir d'une image (tableau 2d)
+     * @param image image à convertir en graphe
+     * @return graphe représentant l'image par fonction d'énergie avant
+     */
+    public static Graph energieAvant (int[][] image) {
+        //récupération de la taille (largeur et hauteur) du tableau de 'pixels'
+        int width = image[0].length;
+        int height = image.length;
+
+        //initialisation du graphe avec largeur * hauteur + 2 sommets (nombre de pixels, sommet source et sommet destination)
+        Graph g = new GraphArrayList((width * height) + 2);
+
+        //création des arêtes depuis le sommet source (le premier du haut)
+        for (int i = 1; i <= width; i++) {
+            ((GraphArrayList) g).addEdge(new Edge(0, i, 0));
+        }
+
+        //sommet courant pour le parcours
+        int vertex = 1;
+
+        int op1, op2;
+
+        //parcours du tableau
+        for (int row = 0; row < height-1; row++) {
+            for (int col = 0; col < width; col++) {
+
+                if (col == 0) {
+
+                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width, image[row][col+1]));
+
+                    if (row == height - 2) {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width + 1, image[row][col+1]));
+                    } else {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width + 1, Math.abs(image[row][col+1] - image[row+1][col])));
+                    }
+
+                } else if (col == width-1) {
+
+                    if (row == height - 2) {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width - 1, image[row][col-1]));
+                    } else {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width - 1, Math.abs(image[row][col-1] - image[row+1][col])));
+                    }
+
+                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width, image[row][col-1]));
+
+                } else {
+
+                    if (row == height - 2) {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width - 1, image[row][col-1]));
+                    } else {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width - 1, Math.abs(image[row][col-1] - image[row+1][col])));
+                    }
+
+                    ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width, Math.abs(image[row][col+1] - image[row][col-1])));
+
+                    if (row == height - 2) {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width + 1, image[row][col+1]));
+                    } else {
+                        ((GraphArrayList) g).addEdge(new Edge(vertex, vertex + width + 1, Math.abs(image[row][col+1] - image[row+1][col])));
+                    }
+
+                }
+
+                vertex++;
+
+            }
+        }
+
+        //création des arêtes en direction du sommet destination (le dernier du bas)
+        for (int i = 0; i < width; i++) {
+
+            if (i == 0) {
+
+                ((GraphArrayList) g).addEdge(new Edge(((width*height) - (width-1)) + i,(width * height) + 1, image[height-1][i+1]));
+
+            } else if (i == width - 1) {
+
+                ((GraphArrayList) g).addEdge(new Edge(((width*height) - (width-1)) + i,(width * height) + 1, image[height-1][i-1]));
+
+            } else {
+
+                ((GraphArrayList) g).addEdge(new Edge(((width*height) - (width-1)) + i,(width * height) + 1, Math.abs(image[height-1][i-1] - image[height-1][i+1])));
+
+            }
+
         }
 
         return g;

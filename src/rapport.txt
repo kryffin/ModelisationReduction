@@ -1,0 +1,16 @@
+Description de l'utilisation :
+	
+	Utilisation de la commande java pour le lancement de l'executable .jar avec l'option -jar,
+	avec en options propre au programme le nom du fichier (image) au format pgm à traiter suivi
+	du nom du fichier dans lequel enregistrer le résultat sous forme :
+	
+	java -jar ModelisationReduction.jar [fichierSource(.pgm)] [fichierDestination(.pgm)]
+
+	Ajouter le format aux noms des fichiers est optionnel car mon programme les ajouteras s'il
+	ne sont pas présents.
+
+	Exemple :
+	java -jar ModelisationReduction.jar super.pgm super_reduit
+
+
+Modifications apportées :

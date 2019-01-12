@@ -55,7 +55,7 @@ public class Application {
         int iteRow = 50;
 
         //affichage de début de traitement
-        System.out.println("\nRéduction de " + iteCol + " colonnes depuis l'image " + args[0] + " vers l'image " + args[1]);
+        System.out.println("\nRéduction de " + iteCol + " colonnes et " + iteRow + " lignes depuis l'image " + args[0] + " vers l'image " + args[1]);
 
         //graphe représentant l'image avec des arêtes pondérée vers les 3 voisins du bas depuis chaque pixel par fonction d'énergie avant
         Graph g;
@@ -94,6 +94,9 @@ public class Application {
             //modifié/amélioré pour suivre le tri topologique car le graphe est un DAG
             bestPath = SeamCarving.Bellman(g, 0, (image.length * image[0].length) + 1, list);
 
+            //je retire le premier élément 0 qui n'est pas un pixel
+            bestPath.remove(0);
+
             //écrasement de la nouvelle image pour redimensionnement
             newImage = new int[height][width-1];
 
@@ -108,11 +111,15 @@ public class Application {
                 for (int col = 0; col < width; col++) {
 
                     //si le pixel en lecture n'est pas à supprimer, on l'affecte à la nouvelle image et on incrémente la colonne de la nouvelle image
-                    if (!bestPath.contains(pixel)) {
+                    if (pixel != bestPath.get(0)) {
                         newImage[row][newCol] = image[row][col];
                         newCol++;
+                    } else {
+                        //si le pixel est à supprimer il est donc traité et on avance dans la liste
+                        bestPath.remove(0);
                     }
 
+                    //itération du pixel courant
                     pixel++;
 
                 }
@@ -126,13 +133,13 @@ public class Application {
             image = newImage;
 
             //affichage du pourcentage de traitement
-            System.out.print("\rTraitement : " + String.format(Locale.FRANCE,"%.2f", ((float) i / (float) iteCol) * 100.f) + " %");
+            System.out.print("\rTraitement des colonnes : " + String.format(Locale.FRANCE,"%.2f", ((float) i / (float) iteCol) * 100.f) + " %");
 
         }
 
-            /* suppression des lignes */
+        System.out.println();
 
-        int[][] flippedImage = new int[width][height];
+            /* suppression des lignes */
 
         //itérations pour chaque lignes à retirer (on va de 1 à iteRow plutôt que 0 à iteRow-1 uniquement pour l'affichage du pourcentage de traitement)
         for (int i = 1; i <= iteRow; i++) {
@@ -140,8 +147,10 @@ public class Application {
             //appel du ramasse miettes
             System.gc();
 
+            int[][] flippedImage = flip(image);
+
             //production du graphe de l'image par fonction d'énergie avant
-            g = SeamCarving.energieAvant(image);
+            g = SeamCarving.energieAvant(flippedImage);
 
             //production du tri topologique sur le graphe
             list = SeamCarving.tritopo(g);
@@ -150,8 +159,11 @@ public class Application {
             //modifié/amélioré pour suivre le tri topologique car le graphe est un DAG
             bestPath = SeamCarving.Bellman(g, 0, (image.length * image[0].length) + 1, list);
 
+            //je retire le premier élément 0 qui n'est pas un pixel
+            bestPath.remove(0);
+
             //écrasement de la nouvelle image pour redimensionnement
-            newImage = new int[height][width-1];
+            newImage = new int[height-1][width];
 
             //pixel à traiter (nom du sommet)
             int pixel = 1;
@@ -164,11 +176,15 @@ public class Application {
                 for (int row = 0; row < height; row++) {
 
                     //si le pixel en lecture n'est pas à supprimer, on l'affecte à la nouvelle image et on incrémente la colonne de la nouvelle image
-                    if (!bestPath.contains(pixel)) {
+                    if (pixel != bestPath.get(0)) {
                         newImage[newRow][col] = image[row][col];
                         newRow++;
+                    } else {
+                        //si le pixel est à supprimer il est donc traité et on avance dans la liste
+                        bestPath.remove(0);
                     }
 
+                    //itération du pixel courant
                     pixel++;
 
                 }
@@ -182,7 +198,7 @@ public class Application {
             image = newImage;
 
             //affichage du pourcentage de traitement
-            System.out.print("\rTraitement : " + String.format(Locale.FRANCE,"%.2f", ((float) i / (float) iteRow) * 100.f) + " %");
+            System.out.print("\rTraitement des lignes : " + String.format(Locale.FRANCE,"%.2f", ((float) i / (float) iteRow) * 100.f) + " %");
 
         }
 

@@ -1,4 +1,8 @@
-package modelisationReduction;
+package modelisationReduction.model.algorythms;
+
+import modelisationReduction.model.Graphs.Edge;
+import modelisationReduction.model.Graphs.Graph;
+import modelisationReduction.model.Graphs.GraphArrayList;
 
 import java.util.ArrayList;
 import java.io.*;

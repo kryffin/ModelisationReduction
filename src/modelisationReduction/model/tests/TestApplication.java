@@ -1,16 +1,22 @@
-package modelisationReduction;
+package modelisationReduction.model.tests;
+
+import modelisationReduction.model.algorythms.Pixel;
+import modelisationReduction.model.algorythms.SeamCarving;
+import modelisationReduction.model.application.Application;
+import modelisationReduction.model.Graphs.Graph;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Test {
+public class TestApplication {
 
     public static void main (String[] args) {
+
+        /* tests pgm */
+
         int[][] image = new int[][] {{3, 11, 24, 39},
                                      {8, 21, 29, 39},
                                      {200, 60, 25, 0}};
-
-        SeamCarving.writepgm(image, "/Users/nicolasklz/test.pgm");
 
         System.out.println("Image :\n" + Arrays.deepToString(image));
 
@@ -43,6 +49,18 @@ public class Test {
         System.out.println(list);
 
         System.out.println("Cout minimal : " + SeamCarving.Bellman(g, 0, 13, list));
+
+        /* tests ppm */
+
+        Pixel[][] imagePpm = new Pixel[3][3];
+
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                imagePpm[row][col] = new Pixel((row + col) * 50, (row + col) * 50, (row + col) * 50);
+            }
+        }
+
+        System.out.println(Arrays.deepToString(imagePpm));
     }
 
 }

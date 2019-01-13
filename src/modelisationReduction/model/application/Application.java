@@ -1,4 +1,8 @@
-package modelisationReduction;
+package modelisationReduction.model.application;
+
+import modelisationReduction.model.Graphs.Graph;
+import modelisationReduction.model.algorythms.Pixel;
+import modelisationReduction.model.algorythms.SeamCarving;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -62,7 +66,7 @@ public class Application {
     public static void main (String[] args) {
         //test sur les arguments du programme
         if (args.length != 2) {
-            System.out.println("Le programme nécessite 2 arguments : java Application [fichierSource.pgm] [fichierCible.pgm]");
+            System.out.println("Le programme nécessite 2 arguments : java -jar ModelisationReduction.jar [fichierSource.pgm] [fichierCible.pgm]");
             return;
         }
 
@@ -81,6 +85,7 @@ public class Application {
      * @param args arguments de lancement
      */
     private static void pgm (String[] args) {
+
         //lecture du fichier source dans un tableau d'entier
         int[][] image = SeamCarving.readpgm(args[0]);
 
@@ -108,7 +113,7 @@ public class Application {
         int width = image[0].length, height = image.length;
 
         //nouvelle image contenant l'image source -1 colonne
-        int[][] newImage = new int[height][width-1];
+        int[][] newImage = new int[height][width];
 
         /* traitement de l'image */
 
@@ -248,6 +253,7 @@ public class Application {
 
         //affichage de confirmation de la fin du programme
         System.out.println("\nTraitement terminé, nouvelle image enregistrée sous " + args[1] + "\n");
+
     }
 
     /**
@@ -423,6 +429,7 @@ public class Application {
 
         //affichage de confirmation de la fin du programme
         System.out.println("\nTraitement terminé, nouvelle image enregistrée sous " + args[1] + "\n");
+
     }
 
 }

@@ -1,6 +1,9 @@
-package modelisationReduction;
+package modelisationReduction.model.algorythms;
 
-import java.lang.reflect.Array;
+import modelisationReduction.model.Graphs.Edge;
+import modelisationReduction.model.Graphs.Graph;
+import modelisationReduction.model.Graphs.GraphArrayList;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Stack;

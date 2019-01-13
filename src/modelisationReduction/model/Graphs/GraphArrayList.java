@@ -1,7 +1,6 @@
-package modelisationReduction;
+package modelisationReduction.model.Graphs;
 
 import java.util.ArrayList;
-import java.io.*;
 
 public class GraphArrayList extends Graph
 {

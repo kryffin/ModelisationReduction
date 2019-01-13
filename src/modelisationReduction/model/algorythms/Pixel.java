@@ -1,4 +1,4 @@
-package modelisationReduction;
+package modelisationReduction.model.algorythms;
 
 /**
  * @author KLEINHENTZ 'Kryffin' Nicolas
@@ -40,7 +40,7 @@ public class Pixel {
     }
 
     /**
-     * Constructeur retournant un pixel moyen entre 2 pixels donnés (chaque canal est la moyenne de ce canal sur les 2 autres pixels)
+     * Constructeur d'un pixel moyen entre 2 pixels donnés (chaque canal est la moyenne de ce canal sur les 2 autres pixels)
      * @param p1 premier pixel
      * @param p2 second pixel
      */
@@ -70,7 +70,7 @@ public class Pixel {
     /**
      * @return canal rouge
      */
-    public int getR() {
+    public int getR () {
         return R;
     }
 
@@ -78,14 +78,14 @@ public class Pixel {
      * Setteur du canal rouge
      * @param r valeur du canal
      */
-    public void setR(int r) {
+    public void setR (int r) {
         R = r;
     }
 
     /**
      * @return canal vert
      */
-    public int getG() {
+    public int getG () {
         return G;
     }
 
@@ -93,14 +93,14 @@ public class Pixel {
      * Setteur du canal vert
      * @param g valeur du canal
      */
-    public void setG(int g) {
+    public void setG (int g) {
         G = g;
     }
 
     /**
      * @return canal bleu
      */
-    public int getB() {
+    public int getB () {
         return B;
     }
 
@@ -108,7 +108,13 @@ public class Pixel {
      * Setteur du canal bleu
      * @param b valeur du canal
      */
-    public void setB(int b) {
+    public void setB (int b) {
         B = b;
     }
+
+    @Override
+    public String toString () {
+        return "{" + R + "," + G + "," + B + "}";
+    }
+
 }

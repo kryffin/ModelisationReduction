@@ -1,8 +1,8 @@
-package modelisationReduction;
+package modelisationReduction.model.Graphs;
 
 import java.io.*;
 
-abstract class Graph
+public abstract class Graph
 {
    public abstract int vertices();
    

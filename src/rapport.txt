@@ -13,5 +13,5 @@ Description de l'utilisation :
 Modifications apportées :
 
     - Utilisation de la fonction d'énergie avant pour la production du graphe directement depuis l'image.
-    - Rajout de la suppression de 50 lignes après avoir supprimé les 50 colonnes.
-    - Ajout de la lecture et écriture des fichiers .ppm (P3) en couleur.
+    - Suppression de lignes en plus des colonnes.
+    - Gestion complète des images .ppm en couleur (P3).

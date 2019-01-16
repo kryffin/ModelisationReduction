@@ -59,12 +59,13 @@ public class Pixel {
     }
 
     /**
-     * Fonction retournant un la moyenne des 3 canaux d'un pixel
+     * Fonction retournant la racine des 3 canaux au carré
      * @param p pixel à moyenner
-     * @return entier représentant la moyenne du pixel
+     * @return entier représentant la 'moyenne' du pixel
      */
     public static int average (Pixel p) {
-        return (p.getR() + p.getG() + p.getB()) / 3;
+        //sqrt((r * r) + (g * g) + (b * b))
+        return (int) Math.sqrt((p.getR() * p.getR()) + (p.getG() * p.getG()) + (p.getB() * p.getB()));
     }
 
     /**

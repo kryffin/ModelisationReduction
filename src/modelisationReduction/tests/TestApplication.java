@@ -1,5 +1,6 @@
 package modelisationReduction.tests;
 
+import modelisationReduction.Graphs.GraphImplicit;
 import modelisationReduction.algorythms.Pixel;
 import modelisationReduction.algorythms.SeamCarving;
 import modelisationReduction.application.Application;
@@ -61,6 +62,16 @@ public class TestApplication {
         }
 
         System.out.println(Arrays.deepToString(imagePpm));
+
+        System.out.println("\n--- Test GraphImplicit ---\n");
+
+        Graph gi = new GraphImplicit(interet, interet[0].length, interet.length);
+
+        System.out.println("tri topo :");
+
+        list = SeamCarving.tritopo(gi);
+
+        System.out.println(list);
     }
 
 }

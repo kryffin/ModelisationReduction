@@ -151,7 +151,7 @@ class DFS
         tritopo = new ArrayList<>();                    //initialisation de la liste d'entiers (sommets) du tri topologique
 
         for (int u = 0; u < g.vertices(); u++) {        //pour chaque sommets du graphe
-            if (!visited[u]) {                              //si il n'a pas été visité
+            if (!visited[u]) {
                 dfs(g, u);                                      //parcours de celui ci
             }
         }

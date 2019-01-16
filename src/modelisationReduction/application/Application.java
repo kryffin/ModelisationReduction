@@ -268,10 +268,10 @@ public class Application {
         /* initialisation des variables */
 
         //nombre de colonnes à retirer
-        int iteCol = 200;
+        int iteCol = Integer.parseInt(args[2]);
 
         //nombre de lignes à retirer
-        int iteRow = 0;
+        int iteRow = Integer.parseInt(args[3]);
 
         //affichage de début de traitement
         System.out.println("\nRéduction de " + iteCol + " colonnes et " + iteRow + " lignes depuis l'image " + args[0] + " vers l'image " + args[1]);

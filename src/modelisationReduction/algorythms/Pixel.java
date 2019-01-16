@@ -1,4 +1,4 @@
-package modelisationReduction.model.algorythms;
+package modelisationReduction.algorythms;
 
 /**
  * @author KLEINHENTZ 'Kryffin' Nicolas

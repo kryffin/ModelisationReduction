@@ -1,4 +1,4 @@
-package modelisationReduction.model.Graphs;
+package modelisationReduction.Graphs;
 
 import java.util.ArrayList;
 

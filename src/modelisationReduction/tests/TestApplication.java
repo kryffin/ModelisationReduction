@@ -1,9 +1,9 @@
-package modelisationReduction.model.tests;
+package modelisationReduction.tests;
 
-import modelisationReduction.model.algorythms.Pixel;
-import modelisationReduction.model.algorythms.SeamCarving;
-import modelisationReduction.model.application.Application;
-import modelisationReduction.model.Graphs.Graph;
+import modelisationReduction.algorythms.Pixel;
+import modelisationReduction.algorythms.SeamCarving;
+import modelisationReduction.application.Application;
+import modelisationReduction.Graphs.Graph;
 
 import java.util.ArrayList;
 import java.util.Arrays;

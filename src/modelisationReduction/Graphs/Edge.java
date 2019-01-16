@@ -1,4 +1,4 @@
-package modelisationReduction.model.Graphs;
+package modelisationReduction.Graphs;
 
 public class Edge
 {

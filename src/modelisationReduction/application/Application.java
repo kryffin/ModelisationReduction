@@ -1,8 +1,8 @@
-package modelisationReduction.model.application;
+package modelisationReduction.application;
 
-import modelisationReduction.model.Graphs.Graph;
-import modelisationReduction.model.algorythms.Pixel;
-import modelisationReduction.model.algorythms.SeamCarving;
+import modelisationReduction.Graphs.Graph;
+import modelisationReduction.algorythms.Pixel;
+import modelisationReduction.algorythms.SeamCarving;
 
 import java.util.ArrayList;
 import java.util.Locale;

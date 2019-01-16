@@ -1,13 +1,14 @@
 Description de l'utilisation :
 	
 	Utilisation de la commande java pour le lancement de l'executable .jar avec l'option -jar,
-	avec en options propre au programme le nom du fichier (image) au format pgm à traiter suivi
-	du nom du fichier dans lequel enregistrer le résultat sous forme :
+	avec en options propre au programme le nom du fichier (image) au format pgm/ppm à traiter suivi
+	du nom du fichier dans lequel enregistrer le résultat ainsi que le nombre de colonnes et lignes
+	à retirer sous forme :
 	
-	java -jar ModelisationReduction.jar [fichierSource.pgm] [fichierDestination.pgm]
+	java -jar ModelisationReduction.jar [fichierSource.pgm] [fichierDestination.pgm] [nombreColonnes] [nombreLignes]
 
 	Exemple :
-	java -jar ModelisationReduction.jar super.pgm super_reduit.pgm
+	java -jar ModelisationReduction.jar super.pgm super_reduit.pgm 50 10
 
 
 Modifications apportées :

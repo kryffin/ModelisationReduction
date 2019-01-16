@@ -65,8 +65,8 @@ public class Application {
      */
     public static void main (String[] args) {
         //test sur les arguments du programme
-        if (args.length != 2) {
-            System.out.println("Le programme nécessite 2 arguments : java -jar ModelisationReduction.jar [fichierSource.pgm] [fichierCible.pgm]");
+        if (args.length != 4) {
+            System.out.println("Le programme nécessite 2 arguments : java -jar ModelisationReduction.jar [fichierSource.pgm] [fichierCible.pgm] [nombreColonnes] [nombreLignes]");
             return;
         }
 
@@ -92,10 +92,10 @@ public class Application {
         /* initialisation des variables */
 
         //nombre de colonnes à retirer
-        int iteCol = 200;
+        int iteCol = Integer.parseInt(args[2]);
 
         //nombre de lignes à retirer
-        int iteRow = 0;
+        int iteRow = Integer.parseInt(args[3]);
 
         //affichage de début de traitement
         System.out.println("\nRéduction de " + iteCol + " colonnes et " + iteRow + " lignes depuis l'image " + args[0] + " vers l'image " + args[1]);

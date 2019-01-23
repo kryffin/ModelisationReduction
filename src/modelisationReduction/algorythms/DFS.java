@@ -64,11 +64,12 @@ class DFS
     }
 
     
-    public static int botched_dfs4(Graph g, int s){
+    public static void botched_dfs4(Graph g, int s){
         Stack<Integer> stack = new Stack<Integer>();
         boolean visited[] = new boolean[g.vertices()];
         stack.push(s);
         visited[s] = true;
+        System.out.println(s);
         while (!stack.empty()){
             boolean end = true;
             /* (a) Soit u le sommet en haut de la pile */
@@ -80,18 +81,18 @@ class DFS
             /* (a) */
             int u = stack.peek();
             for (Edge e: g.next(u))
-            if (!visited[e.to]) /* (b) */ {
-                visited[e.to] = true;
-                stack.push(e.to); /*(c) */
-                end = false;
-                break;
-            }
-            if (end) /*(d)*/ {
+                if (!visited[e.to]) /* (b) */
+                {
+                    visited[e.to] = true;
+                    System.out.println(e.to);
+                    stack.push(e.to); /*(c) */
+                    end = false;
+                    break;
+                }
+            if (end) /*(d)*/
                 stack.pop();
-            }
         }
-
-        return stack.peek();
+        System.out.println(stack.capacity());
     }
     
     public static void testGraph()
@@ -106,9 +107,13 @@ class DFS
 	g.addEdge(new Edge(4, 3, 1));
 	g.addEdge(new Edge(3, 5, 1));
 	g.addEdge(new Edge(5, 1, 1));
+
 	botched_dfs1(g, 0);
+        System.out.println();
 	botched_dfs2(g, 0);
+        System.out.println();
 	botched_dfs3(g, 0);
+        System.out.println();
 	botched_dfs4(g, 0);
     }
 

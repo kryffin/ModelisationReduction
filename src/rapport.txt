@@ -16,3 +16,9 @@ Modifications apportées :
     - Utilisation de la fonction d'énergie avant pour la production du graphe directement depuis l'image.
     - Suppression de lignes en plus des colonnes.
     - Gestion complète des images .ppm en couleur (P3).
+
+Parcours en profondeur itératifs (botched_dfs) :
+    - botched_dfs1 : Ce n'est pas un parcours en profondeur.
+    - botched_dfs2 : Ce parcours s'apparente plus à un parcours en largeur (même s'il ne l'est pas).
+    - botched_dfs3 : Ce parcours est faux, il ne parcours pas en profondeur.
+    - botched_dfs4 : Cet algorithme est bon mais parcours les sommets même quand c'est inutile, sa complexité est donc mauvaise.

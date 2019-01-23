@@ -1,12 +1,12 @@
-package modelisationReduction.algorythms;
+package modelisationReduction.pixels;
 
 /**
  * @author KLEINHENTZ 'Kryffin' Nicolas
  */
-public class Pixel {
+public abstract class Pixel {
 
     /**
-     * canal rouge
+     * canal rouge (ou niveau de gris dans le cas d'un GrayPixel)
      */
     private int R;
 
@@ -29,7 +29,7 @@ public class Pixel {
 
     /**
      * Constructeur par renseignement des canaux
-     * @param R canal rouge
+     * @param R canal rouge (ou niveau de gris pour un GrayPixel)
      * @param G canal vert
      * @param B canal bleu
      */
@@ -40,32 +40,20 @@ public class Pixel {
     }
 
     /**
-     * Constructeur d'un pixel moyen entre 2 pixels donnés (chaque canal est la moyenne de ce canal sur les 2 autres pixels)
-     * @param p1 premier pixel
-     * @param p2 second pixel
-     */
-    public Pixel (Pixel p1, Pixel p2) {
-        this((p1.getR() + p2.getR()) / 2, (p1.getG() + p2.getG()) / 2, (p1.getB() + p2.getB()) / 2);
-    }
-
-    /**
      * Fonction calculant un pixel représentant la différence absolue de chaque canaux des pixels donnés
-     * @param p1 premier pixel
-     * @param p2 second pixel
+     * @param p pixel
      * @return pixel représentant la différence absolue
      */
-    public static Pixel absoluteDifference (Pixel p1, Pixel p2) {
-        return new Pixel(Math.abs(p1.getR() - p2.getR()), Math.abs(p1.getG() - p2.getG()), Math.abs(p1.getB() - p2.getB()));
-    }
+    public abstract Pixel absoluteDifference (Pixel p);
 
     /**
-     * Fonction retournant la racine des 3 canaux au carré
+     * Fonction retournant la moyenne des 3 canaux par luminance
      * @param p pixel à moyenner
      * @return entier représentant la 'moyenne' du pixel
      */
     public static int average (Pixel p) {
-        //sqrt((r * r) + (g * g) + (b * b))
-        return (int) Math.sqrt((p.getR() * p.getR()) + (p.getG() * p.getG()) + (p.getB() * p.getB()));
+        //(0,2126 * R) + (0,7152 * G) + (0,0722 * B)
+        return (int) ((0.2126 * p.R) + (0.7152 * p.G) + (0.0722 * p.B));
     }
 
     /**
@@ -113,9 +101,6 @@ public class Pixel {
         B = b;
     }
 
-    @Override
-    public String toString () {
-        return "{" + R + "," + G + "," + B + "}";
-    }
+    public abstract String toString ();
 
 }

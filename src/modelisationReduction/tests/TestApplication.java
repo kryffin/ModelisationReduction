@@ -1,7 +1,9 @@
 package modelisationReduction.tests;
 
 import modelisationReduction.Graphs.GraphImplicit;
-import modelisationReduction.algorythms.Pixel;
+import modelisationReduction.pixels.ColorPixel;
+import modelisationReduction.pixels.GrayPixel;
+import modelisationReduction.pixels.Pixel;
 import modelisationReduction.algorythms.SeamCarving;
 import modelisationReduction.application.Application;
 import modelisationReduction.Graphs.Graph;
@@ -15,19 +17,23 @@ public class TestApplication {
 
         /* tests pgm */
 
-        int[][] image = new int[][] {{3, 11, 24, 39},
-                                     {8, 21, 29, 39},
-                                     {200, 60, 25, 0}};
+        Pixel[][] imageP = new GrayPixel[][] {{new GrayPixel(3), new GrayPixel(11), new GrayPixel(24), new GrayPixel(39)},
+                                            {new GrayPixel(8), new GrayPixel(21), new GrayPixel(29), new GrayPixel(39)},
+                                            {new GrayPixel(200), new GrayPixel(60), new GrayPixel(25), new GrayPixel(0)}};
 
-        System.out.println("Image :\n" + Arrays.deepToString(image));
+        System.out.println("Image :\n" + Arrays.deepToString(imageP));
 
-        int[][] flippedImage = Application.flip(image);
+        Pixel[][] flippedImage = Application.flip(imageP);
 
         System.out.println("Image retournée :\n" + Arrays.deepToString(flippedImage));
 
         flippedImage = Application.flip(flippedImage);
 
         System.out.println("Image retournée :\n" + Arrays.deepToString(flippedImage));
+
+        int[][] image = new int[][] {{3, 11, 24, 39},
+                                    {8, 21, 29, 39},
+                                    {200, 60, 25, 0}};
 
         System.out.println("Intérêt :");
 
@@ -57,7 +63,7 @@ public class TestApplication {
 
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
-                imagePpm[row][col] = new Pixel((row + col) * 50, (row + col) * 50, (row + col) * 50);
+                imagePpm[row][col] = new ColorPixel((row + col) * 50, (row + col) * 50, (row + col) * 50);
             }
         }
 

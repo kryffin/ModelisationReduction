@@ -1,4 +1,4 @@
-package modelisationReduction.Graphs;
+package modelisationReduction.graphs;
 
 import java.io.*;
 

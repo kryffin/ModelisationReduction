@@ -1,6 +1,6 @@
 package modelisationReduction.application;
 
-import modelisationReduction.Graphs.Graph;
+import modelisationReduction.graphs.Graph;
 import modelisationReduction.pixels.Pixel;
 import modelisationReduction.algorythms.SeamCarving;
 

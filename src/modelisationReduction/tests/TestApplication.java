@@ -1,12 +1,12 @@
 package modelisationReduction.tests;
 
-import modelisationReduction.Graphs.GraphImplicit;
+import modelisationReduction.graphs.GraphImplicit;
 import modelisationReduction.pixels.ColorPixel;
 import modelisationReduction.pixels.GrayPixel;
 import modelisationReduction.pixels.Pixel;
 import modelisationReduction.algorythms.SeamCarving;
 import modelisationReduction.application.Application;
-import modelisationReduction.Graphs.Graph;
+import modelisationReduction.graphs.Graph;
 
 import java.util.ArrayList;
 import java.util.Arrays;

@@ -1,8 +1,8 @@
 package modelisationReduction.algorythms;
 
-import modelisationReduction.Graphs.Edge;
-import modelisationReduction.Graphs.Graph;
-import modelisationReduction.Graphs.GraphArrayList;
+import modelisationReduction.graphs.Edge;
+import modelisationReduction.graphs.Graph;
+import modelisationReduction.graphs.GraphArrayList;
 import modelisationReduction.application.Application;
 import modelisationReduction.pixels.ColorPixel;
 import modelisationReduction.pixels.GrayPixel;

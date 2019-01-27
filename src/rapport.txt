@@ -16,6 +16,8 @@ Modifications apportées :
     - Utilisation de la fonction d'énergie avant pour la production du graphe directement depuis l'image.
     - Suppression de lignes en plus des colonnes.
     - Gestion complète des images .ppm en couleur (P3).
+    - Implémentation du parcours en profondeur itératif.
+    - Complétion de la classe GraphImplicit.
 
 Parcours en profondeur itératifs (botched_dfs) :
     - botched_dfs1 : Ce n'est pas un parcours en profondeur.

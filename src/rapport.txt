@@ -1,3 +1,15 @@
+
+                Devoir Maison de l'UE Modélisation - 2019
+
+                par KLEINHENTZ Nicolas
+
+
+
+Répartition du travail :
+
+    J'ai travaillé seul donc aucune répartition du travail.
+
+
 Description de l'utilisation :
 	
 	Utilisation de la commande java pour le lancement de l'executable .jar avec l'option -jar,
@@ -5,10 +17,22 @@ Description de l'utilisation :
 	du nom du fichier dans lequel enregistrer le résultat ainsi que le nombre de colonnes et lignes
 	à retirer sous forme :
 	
-	java -jar ModelisationReduction.jar [fichierSource.pgm] [fichierDestination.pgm] [nombreColonnes] [nombreLignes]
+	java -jar ModelisationReduction.jar [fichierSource(.pgm|.ppm)] [fichierDestination(.pgm|.ppm)] [nombreColonnes] [nombreLignes]
 
 	Exemple :
-	java -jar ModelisationReduction.jar super.pgm super_reduit.pgm 50 10
+
+	    java -jar ModelisationReduction.jar image.ppm image_reduite.ppm 50 10
+
+
+Fichiers fournis :
+
+    - Un dossier src contenant les sources .java du projet.
+    - Une archive exécutable ModelisationReduction.jar.
+    - Ce rapport au format .txt contenant des informations sur le projet.
+    - Une image ssbu.pgm non modifiée.
+    - Une image resultat_ssbu.pgm modifiée en enlevant 50 colonnes et 0 lignes grâce à la commande :
+
+        java -jar ModelisationReduction.jar ssbu.pgm resultat_ssbu.pgm 50 0
 
 
 Modifications apportées :
@@ -18,6 +42,7 @@ Modifications apportées :
     - Gestion complète des images .ppm en couleur (P3).
     - Implémentation du parcours en profondeur itératif.
     - Complétion de la classe GraphImplicit.
+
 
 Parcours en profondeur itératifs (botched_dfs) :
     - botched_dfs1 : Ce n'est pas un parcours en profondeur.
